@@ -4,6 +4,8 @@ param firstTwoOctets string = '10.0'
 
 var location = resourceGroup().location
 
+output jumpID string = vnet.properties.subnets[2].id
+
 resource vnet 'Microsoft.Network/virtualNetworks@2022-01-01' = {
   name: name
   location: location
@@ -15,13 +17,25 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-01-01' = {
     }
     enableDdosProtection: false
     enableVmProtection: false
-  }
-}
-
-resource serversSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-01-01' = {
-  name: 'servers'
-  parent: vnet
-  properties: {
-    addressPrefix: '${firstTwoOctets}.0.0/24'
+    subnets: [
+      {
+        name: 'AzureBastionSubnet'
+        properties: {
+          addressPrefix: '${firstTwoOctets}.0.0/24'
+        }
+      }
+      {
+        name: 'servers-sn'
+        properties: {
+          addressPrefix: '${firstTwoOctets}.1.0/24'
+        }
+      }
+      {
+        name: 'jumpbox-sn'
+        properties: {
+          addressPrefix: '${firstTwoOctets}.255.0/24'
+        }
+      }
+    ]
   }
 }

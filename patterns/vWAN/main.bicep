@@ -1,8 +1,7 @@
 
-module vnetModule '../../components/network/vnet.bicep' = [for ndx in range(0,10): {
-  name: 'vnetModule${ndx}'
+module vwanModule 'vwan-pattern.bicep' = [for ndx in range(0,5): {
+  name: 'vwanModule${ndx}'
   params: {
-    name: 'vnet-${ndx}'
-    firstTwoOctets: '10.${ndx}'
+    ndx: ndx
   }
 }]
