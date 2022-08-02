@@ -5,15 +5,16 @@ module vnetModule '../../components/network/vnet.bicep' = {
   params: {
     name: 'vnet-${ndx}'
     firstTwoOctets: '10.${ndx}'
+    useBastion: ndx == 0 ? true : false
   }
 }
 
 module vmModule '../../components/compute/vm.bicep' = {
-  name: 'vm${ndx}'
+  name: 'vwanvm${ndx}'
   params: {
     subnetID: vnetModule.outputs.jumpID
     password: '@@0523RnK0524@@'
-    vmName: 'vm${ndx}'
+    vmName: 'vwanvm${ndx}'
     username: 'vmadmin'
   }
 }
